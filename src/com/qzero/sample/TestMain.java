@@ -1,21 +1,23 @@
-# JAVA多线程下载实现
-java多线程下载实现（暂未实现断点续传）
+/*
+ * Author QZero
+ * All Rights Reserved
+ */
 
-例程为 com.qzero.sample.TestMain
+package com.qzero.sample;
 
-# 如何使用
-1.将 com.qzero.download 包下的文件复制到项目中
-2.创建 Downloader 对象
-	```Java
-	Downloader downloader=new Downloader("远程文件地址",new File("本地文件地址"),线程数);
-	```
-3.根据需要设置反馈周期（即调用callback中onProgress的周期，单位毫秒，默认1000）
-	```Java
-	downloader.setT(500);
-	```
-4.创建 DownloadCallback 下载回调对象
-	```Java
-	DownloadCallback callback=new DownloadCallback() {
+import com.qzero.download.DownloadCallback;
+import com.qzero.download.DownloadProgress;
+import com.qzero.download.Downloader;
+
+import java.io.File;
+
+public class TestMain {
+
+    private static final long T=1000;
+
+    public static void main(String[] args) {
+
+        DownloadCallback callback=new DownloadCallback() {
             @Override
             public void onSuccess(long length) {
                 System.out.println("下载成功，大小 "+ Downloader.sizeToGb(length)+" Gb");
@@ -33,8 +35,11 @@ java多线程下载实现（暂未实现断点续传）
                         Downloader.getSpeed(progress.getDeltaLength(),T)+" Mb/s");
             }
         };
-	```
-5.开始下载
-	```Java
-	downloader.download(callback);
-	```
+
+        Downloader downloader=new Downloader("http://res06.bignox.com/full/20190401/d123a694c9f747818432ee6da2342f57.exe?filename=nox_setup_v6.2.8.0_full.exe",new File("H:\\1.exe"),5);
+        downloader.setT(T);
+        downloader.download(callback);
+
+    }
+
+}
